@@ -1,11 +1,11 @@
 {
-	"name": "steam-store",
+	"name": "steamstore",
 	"version": "1.0.0",
 	"description": "Interacts with the store.steampowered.com site for account management",
 	"keywords": ["steam", "steam store", "steam account", "steampowered"],
-	"homepage": "https://github.com/DoctorMcKay/node-steam-store",
+	"homepage": "https://github.com/DoctorMcKay/node-steamstore",
 	"bugs": {
-		"url": "https://github.com/DoctorMcKay/node-steam-store/issues"
+		"url": "https://github.com/DoctorMcKay/node-steamstore/issues"
 	},
 	"license": "MIT",
 	"author": {
@@ -15,7 +15,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/DoctorMcKay/node-steam-store.git"
+		"url": "https://github.com/DoctorMcKay/node-steamstore.git"
 	},
 	"dependencies": {
 		"request": "^2.67.0"
