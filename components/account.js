@@ -163,3 +163,30 @@ SteamStore.prototype.confirmRemovePhoneNumber = function(code, callback) {
 		}
 	});
 };
+
+SteamStore.prototype.getAccountData = function(callback) {
+	var self = this;
+	this.request.get({
+		"uri": "https://store.steampowered.com/dynamicstore/userdata/",
+		"qs": {
+			"id": this.steamID.accountid
+		},
+		"json": true
+	}, function(err, response, body) {
+		if(self._checkHttpError(err, response, callback)) {
+			return;
+		}
+
+		if(!body.rgWishlist || !body.rgOwnedPackages || !body.rgOwnedApps || !body.rgRecommendedTags || !body.rgIgnoredApps) {
+			callback(new Error("Malformed response"));
+			return;
+		}
+
+		var tags = {};
+		body.rgRecommendedTags.forEach(function(tag) {
+			tags[tag.tagid] = tag.name;
+		});
+
+		callback(null, body.rgOwnedApps, body.rgOwnedPackages, body.rgWishlist, body.rgIgnoredApps, tags);
+	});
+};
