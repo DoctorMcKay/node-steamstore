@@ -1,0 +1,23 @@
+{
+	"name": "steam-store",
+	"version": "1.0.0",
+	"description": "Interacts with the store.steampowered.com site for account management",
+	"keywords": ["steam", "steam store", "steam account", "steampowered"],
+	"homepage": "https://github.com/DoctorMcKay/node-steam-store",
+	"bugs": {
+		"url": "https://github.com/DoctorMcKay/node-steam-store/issues"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Alexander Corn",
+		"email": "mckay@doctormckay.com",
+		"url": "https://www.doctormckay.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/DoctorMcKay/node-steam-store.git"
+	},
+	"dependencies": {
+		"request": "^2.67.0"
+	}
+}
