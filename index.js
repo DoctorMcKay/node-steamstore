@@ -1,4 +1,5 @@
 var Request = require('request');
+var SteamID = require('steamid');
 
 module.exports = SteamStore;
 
@@ -11,8 +12,13 @@ function SteamStore() {
 }
 
 SteamStore.prototype.setCookie = function(cookie) {
-	this._jar.setCookie(Request.cookie(cookie), "http://store.steampowered.com");
-	this._jar.setCookie(Request.cookie(cookie), "https://store.steampowered.com");
+	var cookieName = cookie.match(/(.+)=/)[1];
+	if(cookieName == 'steamLogin') {
+		this.steamID = new SteamID(cookie.match(/=(\d+)/)[1]);
+	}
+
+	var isSecure = !!cookieName.match(/(^steamMachineAuth|^steamLoginSecure$)/);
+	this._jar.setCookie(Request.cookie(cookie), (isSecure ? "https://" : "http://") + "store.steampowered.com");
 };
 
 SteamStore.prototype.setCookies = function(cookies) {
