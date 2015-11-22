@@ -12,6 +12,13 @@ This module cannot facilitate logins to the store site directly. You'll need to 
 
 The cookies are the same for the store site and for the community site.
 
+# Properties
+
+### steamID
+**v1.1.0 or later is required to use this property**
+
+A [`SteamID`](https://www.npmjs.com/package/steamid) object for the currently logged-in user.
+
 # Methods
 
 ### Constructor()
@@ -75,3 +82,14 @@ Call [`confirmRemovePhoneNumber`](#confirmremovephonenumbercode-callback) with t
     - `err` - An `Error` object on failure, or `null` on success
 
 Finalizes the process of removing your phone number from your account.
+
+### getAccountData(callback)
+- `callback` - A function to be called when the request completes
+    - `err` - An `Error` object on failure, or `null` on success
+    - `ownedApps` - An array containing the AppID of each app which your account owns
+    - `ownedPackages` - An array containing the PackageID of each package which your account owns
+    - `wishlist` - An array containing the AppID of each app that's on your wishlist
+    - `ignoredApps` - An array containing the AppID of each app which you've clicked "Not Interested" on
+    - `tags` - An object containing the tags which are suggested for you. Keys are TagIDs, values are the tag names.
+
+Gets information about products that your account owns, ignores, wants, or is recommended.
