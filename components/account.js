@@ -190,3 +190,25 @@ SteamStore.prototype.getAccountData = function(callback) {
 		callback(null, body.rgOwnedApps, body.rgOwnedPackages, body.rgWishlist, body.rgIgnoredApps, tags);
 	});
 };
+
+SteamStore.prototype.hasPhone = function(callback) {
+	var self = this;
+	this.request.get({
+		"uri": "https://steamcommunity.com/steamguard/phoneajax",
+		"qs": {
+			"op": "has_phone"
+		},
+		"json": true
+	}, function(err, response, body) {
+		if(self._checkHttpError(err, response, callback)) {
+			return;
+		}
+
+		if(!body.success) {
+			callback(new Error("Request failed"));
+			return;
+		}
+
+		callback(null, !!body.has_phone);
+	});
+};
