@@ -83,6 +83,15 @@ Call [`confirmRemovePhoneNumber`](#confirmremovephonenumbercode-callback) with t
 
 Finalizes the process of removing your phone number from your account.
 
+### hasPhone(callback)
+- `callback` - A function to be called when the request completes
+    - `err` - An `Error` object on failure, or `null` on success
+    - `hasPhone` - `true` if your account has a phone number linked, `false` if not
+
+**v1.2.0 or later is required to use this method**
+
+Checks whether your account has a phone number linked or not.
+
 ### getAccountData(callback)
 - `callback` - A function to be called when the request completes
     - `err` - An `Error` object on failure, or `null` on success
