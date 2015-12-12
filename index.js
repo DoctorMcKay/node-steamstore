@@ -20,7 +20,6 @@ SteamStore.prototype.setCookie = function(cookie) {
 
 	var isSecure = !!cookieName.match(/(^steamMachineAuth|^steamLoginSecure$)/);
 	this._jar.setCookie(Request.cookie(cookie), (isSecure ? "https://" : "http://") + "store.steampowered.com");
-	this._jar.setCookie(Request.cookie(cookie), (isSecure ? "https://" : "http://") + "steamcommunity.com");
 };
 
 SteamStore.prototype.setCookies = function(cookies) {
