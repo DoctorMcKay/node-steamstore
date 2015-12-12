@@ -1,6 +1,6 @@
 {
 	"name": "steamstore",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "Interacts with the store.steampowered.com site for account management",
 	"keywords": ["steam", "steam store", "steam account", "steampowered"],
 	"homepage": "https://github.com/DoctorMcKay/node-steamstore",
