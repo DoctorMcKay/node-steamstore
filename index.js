@@ -7,8 +7,9 @@ function SteamStore() {
 	this._jar = Request.jar();
 	this.request = Request.defaults({"jar": this._jar, "timeout": 50000});
 
-	// UTC
+	// UTC, English
 	this.setCookie("timezoneOffset=0,0");
+	this.setCookie("Steam_Language=english");
 }
 
 SteamStore.prototype.setCookie = function(cookie) {

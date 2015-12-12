@@ -1,4 +1,5 @@
 var SteamStore = require('../index.js');
+var Cheerio = require('cheerio');
 
 SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callback) {
 	if(typeof bypassConfirmation === 'function') {
@@ -193,22 +194,27 @@ SteamStore.prototype.getAccountData = function(callback) {
 
 SteamStore.prototype.hasPhone = function(callback) {
 	var self = this;
-	this.request.get({
-		"uri": "https://steamcommunity.com/steamguard/phoneajax",
-		"qs": {
-			"op": "has_phone"
-		},
-		"json": true
-	}, function(err, response, body) {
+	this.request.get("https://store.steampowered.com/account/", function(err, response, body) {
 		if(self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		if(!body.success) {
-			callback(new Error("Request failed"));
+		var $ = Cheerio.load(body);
+		var $phone = $('.phone_header_description .account_data_field');
+		var match;
+
+		if($phone && (match = $phone.text().match(/Ends in (\d+)/))) {
+			// Has phone number
+			callback(null, true, match[1]);
 			return;
 		}
 
-		callback(null, !!body.has_phone);
+		// See if we have an add-number link
+		if($('a[href*="/phone/add"]').length) {
+			callback(null, false);
+			return;
+		}
+
+		callback(new Error("Malformed response"));
 	});
 };
