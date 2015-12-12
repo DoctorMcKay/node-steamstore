@@ -87,8 +87,9 @@ Finalizes the process of removing your phone number from your account.
 - `callback` - A function to be called when the request completes
     - `err` - An `Error` object on failure, or `null` on success
     - `hasPhone` - `true` if your account has a phone number linked, `false` if not
+    - `lastDigits` - If you have a phone number, this is a string containing the last 4 digits of your number
 
-**v1.2.0 or later is required to use this method**
+**v1.3.0 or later is required to use this method**
 
 Checks whether your account has a phone number linked or not.
 
