@@ -5,7 +5,7 @@ module.exports = SteamStore;
 
 function SteamStore() {
 	this._jar = Request.jar();
-	this.request = Request.defaults({"jar": this._jar, "timeout": 50000});
+	this.request = Request.defaults({"jar": this._jar, "timeout": 50000, "gzip": true});
 
 	// UTC, English
 	this.setCookie("timezoneOffset=0,0");
