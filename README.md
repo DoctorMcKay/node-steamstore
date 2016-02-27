@@ -102,4 +102,21 @@ Checks whether your account has a phone number linked or not.
     - `ignoredApps` - An array containing the AppID of each app which you've clicked "Not Interested" on
     - `tags` - An object containing the tags which are suggested for you. Keys are TagIDs, values are the tag names.
 
+**v1.1.0 or later is required to use this method**
+
 Gets information about products that your account owns, ignores, wants, or is recommended.
+
+### sendGift(giftID, recipient, recipientName, message, closing, signature[, callback])
+- `giftID` - The gift's ID (also known as the asset ID of the item in your Steam gift inventory)
+- `recipient` - Either the recipient's email address (to send it over email) or the recipient's SteamID (as a `SteamID` object or string) to send it over Steam. If using a SteamID, you need to be friends with the user.
+- `recipientName` - The name of the recipient to put in the gift email/popup
+- `message` - The message to include in the email/popup
+- `closing` - The closing to include in the email/popup
+- `signature` - Your name to include in the email/popup
+- `callback` - Optional. Called when the request completes.
+    - `err` - An `Error` object on failure, or `null` on success
+
+**v1.4.0 or later is required to use this method**
+
+Sends a Steam gift in your inventory to another user. The gift will remain in your inventory until the recipient accepts it.
+You can re-send a gift which you've already sent. Gifts don't have to be tradable in order to be sent.

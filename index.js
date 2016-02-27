@@ -66,3 +66,4 @@ SteamStore.prototype._checkHttpError = function(err, response, callback) {
 };
 
 require('./components/account.js');
+require('./components/gifts.js');
