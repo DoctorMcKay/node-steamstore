@@ -14,7 +14,8 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 			"op": "get_phone_number",
 			"input": number,
 			"sessionID": this.getSessionID(),
-			"confirmed": bypassConfirmation ? 1 : 0
+			"confirmed": bypassConfirmation ? 1 : 0,
+			"checkfortos": 1
 		},
 		"json": true
 	}, function(err, response, body) {
@@ -98,7 +99,8 @@ SteamStore.prototype.verifyPhoneNumber = function(code, callback) {
 			"op": "get_sms_code",
 			"input": code,
 			"sessionID": this.getSessionID(),
-			"confirmed": 0
+			"confirmed": 1,
+			"checkfortos": 1
 		},
 		"json": true
 	}, function(err, response, body) {
