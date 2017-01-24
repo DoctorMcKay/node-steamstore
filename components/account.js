@@ -220,3 +220,26 @@ SteamStore.prototype.hasPhone = function(callback) {
 		callback(new Error("Malformed response"));
 	});
 };
+
+SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages, callback) {
+	if(typeof(sec_languages) == "function") {
+		callback = sec_languages;
+		sec_languages = undefined;
+	}
+	
+	var self = this;
+	this.request.post({
+		"uri": "https://store.steampowered.com/account/savelanguagepreferences",
+		"form": {
+			"sessionid": this.getSessionID(),
+			"primary_language": prim_language,
+			"secondary_languages": sec_languages || [],
+		}
+	}, function(err, response, body) {
+		if(self._checkHttpError(err, response, callback)) {
+			return;
+		}
+
+		callback(null);
+	});
+};
