@@ -120,3 +120,14 @@ Gets information about products that your account owns, ignores, wants, or is re
 
 Sends a Steam gift in your inventory to another user. The gift will remain in your inventory until the recipient accepts it.
 You can re-send a gift which you've already sent. Gifts don't have to be tradable in order to be sent.
+
+### redeemWalletCode(walletCode[, callback])
+- `walletCode` - The Steam wallet code you want to redeem
+- `callback` - Optional. Called when the request completes.
+    - `err` - An `Error` object if the request fails (http error, or response malformed)
+    - `result` - The result of the request. An object containing two keys: `EResult` containing a value from `SteamStore.EResult` enums and `EPurchaseResult` containing a value from `SteamStore.EPurchaseResult` enums
+    - `redeemed` - A boolean, true if the wallet code was successfully redeemed
+
+**v1.4.2 or later is required to use this method**
+
+Attempts to redeem a Steam Wallet code.
