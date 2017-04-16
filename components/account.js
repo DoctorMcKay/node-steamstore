@@ -246,7 +246,11 @@ SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages
 			return;
 		}
 
-		callback && callback(null);
+		if (body.success != EResult.OK) {
+			callback && callback(new Error(EResult[body.success] || "Error " + body.success));
+		} else {
+			callback && callback(null);
+		}
 	});
 };
 

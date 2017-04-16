@@ -148,3 +148,13 @@ Check to make sure a Steam wallet code is valid, and if it is valid, figure out 
 Attempts to redeem a Steam Wallet code on your account. This will call `checkWalletCode` first, and if the code is not
 redeemable, the callback will be invoked with an `Error` passed as the first parameter. That `Error` will have message
 `Wallet code is not valid`, with `eresult` and `purchaseresultdetail` properties defined on that `Error` object.
+
+### setDisplayLanguages(primary[, secondary][, callback])
+- `primary` - Your desired primary (display) language, as a string (e.g. `english` or `danish`)
+- `secondary` - Your desired secondary languages, as an array of strings of the same format as `primary`
+- `callback` - Optional. Called when the request completes.
+    - `err` - An `Error` object on failure, or `null` on success
+
+**v1.5.0 or later is required to use this method**
+
+Updates your account's display languages for the Steam store.
