@@ -121,13 +121,30 @@ Gets information about products that your account owns, ignores, wants, or is re
 Sends a Steam gift in your inventory to another user. The gift will remain in your inventory until the recipient accepts it.
 You can re-send a gift which you've already sent. Gifts don't have to be tradable in order to be sent.
 
+### checkWalletCode(walletCode, callback)
+- `walletCode` - The Steam wallet code you want to check
+- `callback` - Required. Called when the requested data is available.
+    - `err` - An `Error` object if the request fails, or `null` otherwise
+    - `eresult` - An `EResult` value from `SteamStore.EResult`
+    - `detail` - A value from `SteamStore.EPurchaseResult`
+    - `redeemable` - `true` if this code can be redeemed, `false` if not
+    - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
+    - `currencycode` - If redeemable, this is the currency of `amount`
+
+**v1.5.0 or later is required to use this method**
+
+Check to make sure a Steam wallet code is valid, and if it is valid, figure out how much it's worth.
+
 ### redeemWalletCode(walletCode[, callback])
 - `walletCode` - The Steam wallet code you want to redeem
 - `callback` - Optional. Called when the request completes.
-    - `err` - An `Error` object if the request fails (http error, or response malformed)
-    - `result` - The result of the request. An object containing two keys: `EResult` containing a value from `SteamStore.EResult` enums and `EPurchaseResult` containing a value from `SteamStore.EPurchaseResult` enums
-    - `redeemed` - A boolean, true if the wallet code was successfully redeemed
+    - `err` - An `Error` object if the request fails, or `null` on success
+    - `eresult` - An `EResult` value from `SteamStore.EResult`
+    - `detail` - A value from `SteamStore.EPurchaseResult`
+    - `formattedNewWalletBalance` - If redeemed successfully, this is your new wallet balance as a string, formatted for human display (e.g. `$20.00`)
 
-**v1.4.2 or later is required to use this method**
+**v1.5.0 or later is required to use this method**
 
-Attempts to redeem a Steam Wallet code.
+Attempts to redeem a Steam Wallet code on your account. This will call `checkWalletCode` first, and if the code is not
+redeemable, the callback will be invoked with an `Error` passed as the first parameter. That `Error` will have message
+`Wallet code is not valid`, with `eresult` and `purchaseresultdetail` properties defined on that `Error` object.

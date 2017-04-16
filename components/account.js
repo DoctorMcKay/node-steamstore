@@ -1,11 +1,11 @@
 var SteamStore = require('../index.js');
 var Cheerio = require('cheerio');
 
-var EPurchaseResult = require('../resources/EPurchaseResult.js')
-SteamStore.prototype.EPurchaseResult = EPurchaseResult
+var EPurchaseResult = require('../resources/EPurchaseResult.js');
+SteamStore.prototype.EPurchaseResult = EPurchaseResult;
 
-var EResult = require('../resources/EResult.js')
-SteamStore.prototype.EResult = EResult
+var EResult = require('../resources/EResult.js');
+SteamStore.prototype.EResult = EResult;
 
 SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callback) {
 	if(typeof bypassConfirmation === 'function') {
@@ -228,7 +228,7 @@ SteamStore.prototype.hasPhone = function(callback) {
 };
 
 SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages, callback) {
-	if(typeof(sec_languages) == "function") {
+	if (typeof sec_languages === "function") {
 		callback = sec_languages;
 		sec_languages = undefined;
 	}
@@ -239,45 +239,76 @@ SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages
 		"form": {
 			"sessionid": this.getSessionID(),
 			"primary_language": prim_language,
-			"secondary_languages": sec_languages || [],
+			"secondary_languages": sec_languages || []
 		}
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		callback(null);
+		callback && callback(null);
+	});
+};
+
+SteamStore.prototype.checkWalletCode = function(code, callback) {
+	var self = this;
+	this.request.post({
+		"uri": "https://store.steampowered.com/account/validatewalletcode/",
+		"form": {
+			"wallet_code": code
+		},
+		"json": true
+	}, function(err, response, body) {
+		if (self._checkHttpError(err, response, callback)) {
+			return;
+		}
+
+		if (!body.success && !body.detail && !body.wallet) {
+			callback(new Error("Malformed response"));
+			return;
+		}
+
+		callback(null, body.success, body.detail, body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail, body.wallet && body.wallet.amount, body.wallet && body.wallet.currencycode);
 	});
 };
 
 SteamStore.prototype.redeemWalletCode = function(code, callback) {
     var self = this;
-    this.request.post({
-        "uri": "https://store.steampowered.com/account/validatewalletcode/",
-        "form": {
-        	"wallet_code": code
-        },
-		"json": true
-    }, function(err, response, body) {
-        if(self._checkHttpError(err, response, callback)) {
-            return;
-        }
+    this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, amount, currencycode, redeemable) {
+    	if (err) {
+    		callback && callback(err);
+    		return;
+	    }
 
-        if(!callback){
-            return;
-        }
+	    if (!redeemable) {
+    		var error = new Error("Wallet code is not valid");
+    		error.eresult = eresult;
+    		error.purchaseresultdetail = purchaseresultdetail;
+    		callback && callback(error);
+    		return;
+	    }
 
-        if(!body.success && !body.detail){
-            callback(new Error("Malformed response"));
-            return;
-        }
+	    self.request.post({
+		    "uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
+		    "form": {
+		    	"wallet_code": code
+		    },
+		    "json": true
+	    }, function(err, response, body) {
+		    if (!callback) {
+			    return;
+		    }
 
-        // arguments: request error, status, wallet code successfully redeemed
-        callback(null, {
-            EResult: body.success,
-            EPurchaseResult: body.detail
-        }, body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail)
-        // ^ I have not tested this, but I believe if the above two conditions are
-        // true then it means the code has been successfully redeemed
+    		if (self._checkHttpError(err, response, callback)) {
+    			return;
+		    }
+
+		    if (!body.success && !body.detail) {
+		    	callback(new Error("Malformed response"));
+		    	return;
+		    }
+
+		    callback(null, body.success, body.detail, body.formattednewwalletbalance);
+	    });
     });
 };

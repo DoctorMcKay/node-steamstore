@@ -80,4 +80,4 @@ module.exports = {
     "35": "WouldExceedMaxWallet",
     "36": "MustLoginPS3AppForPurchase",
     "37": "CannotShipToPOBox",
-}
+};
