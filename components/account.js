@@ -25,13 +25,15 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 		},
 		"json": true
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		if(body.success) {
-			if(body.state != "get_sms_code") {
-				var error = new Error("Unknown state " + body.state);
+		var error;
+
+		if (body.success) {
+			if (body.state != "get_sms_code") {
+				error = new Error("Unknown state " + body.state);
 				error.confirmation = false;
 
 				callback(error);
@@ -42,21 +44,21 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 			return;
 		}
 
-		if(body.errorText) {
-			var error = new Error(body.errorText);
+		if (body.errorText) {
+			error = new Error(body.errorText);
 			error.confirmation = false;
 			callback(error);
 			return;
 		}
 
-		if(body.requiresConfirmation) {
-			var error = new Error(body.confirmationText);
+		if (body.requiresConfirmation) {
+			error = new Error(body.confirmationText);
 			error.confirmation = true;
 			callback(error);
 			return;
 		}
 
-		var error = new Error("Malformed response");
+		error = new Error("Malformed response");
 		error.confirmation = false;
 		callback(error);
 	});
