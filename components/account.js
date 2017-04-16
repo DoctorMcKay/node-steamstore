@@ -1,6 +1,12 @@
 var SteamStore = require('../index.js');
 var Cheerio = require('cheerio');
 
+var EPurchaseResult = require('../resources/EPurchaseResult.js')
+SteamStore.prototype.EPurchaseResult = EPurchaseResult
+
+var EResult = require('../resources/EResult.js')
+SteamStore.prototype.EResult = EResult
+
 SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callback) {
 	if(typeof bypassConfirmation === 'function') {
 		callback = bypassConfirmation;
@@ -242,4 +248,36 @@ SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages
 
 		callback(null);
 	});
+};
+
+SteamStore.prototype.redeemWalletCode = function(code, callback) {
+    var self = this;
+    this.request.post({
+        "uri": "https://store.steampowered.com/account/validatewalletcode/",
+        "form": {
+        	"wallet_code": code
+        },
+		"json": true
+    }, function(err, response, body) {
+        if(self._checkHttpError(err, response, callback)) {
+            return;
+        }
+
+        if(!callback){
+            return;
+        }
+
+        if(!body.success && !body.detail){
+            callback(new Error("Malformed response"));
+            return;
+        }
+
+        // arguments: request error, status, wallet code successfully redeemed
+        callback(null, {
+            EResult: body.success,
+            EPurchaseResult: body.detail
+        }, body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail)
+        // ^ I have not tested this, but I believe if the above two conditions are
+        // true then it means the code has been successfully redeemed
+    });
 };
