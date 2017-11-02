@@ -7,6 +7,9 @@ SteamStore.prototype.EPurchaseResult = EPurchaseResult;
 var EResult = require('../resources/EResult.js');
 SteamStore.prototype.EResult = EResult;
 
+var EKeyActivationResult = require('../resources/EKeyActivationResult.js');
+SteamStore.prototype.EKeyActivationResult = EKeyActivationResult;
+
 SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callback) {
 	if(typeof bypassConfirmation === 'function') {
 		callback = bypassConfirmation;
@@ -316,5 +319,32 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
 
 		    callback(null, body.success, body.detail, body.formattednewwalletbalance);
 	    });
+    });
+};
+
+SteamStore.prototype.redeemGameKey = function(code, callback) {
+	var self = this;
+    self.request.post({
+        "uri": "https://store.steampowered.com/account/ajaxregisterkey/",
+        "form": {
+            "product_key": code,
+			"sessionid": this.getSessionID()
+        },
+        "json": true
+    }, function(err, response, body) {
+        if (!callback) {
+            return;
+        }
+
+        if (self._checkHttpError(err, response, callback)) {
+            return;
+        }
+
+        if (!body.success && !body.purchase_receipt_info) {
+            callback(new Error("Malformed response"));
+            return;
+        }
+
+        callback(null, body.success, body.purchase_result_details, body.purchase_receipt_info);
     });
 };
