@@ -314,7 +314,7 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
 		    	return;
 		    }
 
-		    callback(null, body.success, body.detail, body.formattednewwalletbalance);
+		    callback(null, body.success, body.detail, body.formattednewwalletbalance, amount);
 	    });
     });
 };
