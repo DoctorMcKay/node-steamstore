@@ -141,7 +141,9 @@ Check to make sure a Steam wallet code is valid, and if it is valid, figure out 
     - `err` - An `Error` object if the request fails, or `null` on success
     - `eresult` - An `EResult` value from `SteamStore.EResult`
     - `detail` - A value from `SteamStore.EPurchaseResult`
-    - `formattedNewWalletBalance` - If redeemed successfully, this is your new wallet balance as a string, formatted for human display (e.g. `$20.00`)
+    - `formattedNewWalletBalance` - If redeemed successfully, this is your new wallet balance as a string, formatted for human display (e.g. `$20.00`)   
+    - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
+
 
 **v1.5.0 or later is required to use this method**
 

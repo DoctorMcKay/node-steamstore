@@ -283,7 +283,7 @@ SteamStore.prototype.checkWalletCode = function(code, callback) {
 
 SteamStore.prototype.redeemWalletCode = function(code, callback) {
     var self = this;
-    this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, amount, currencycode, redeemable) {
+    this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, redeemable, amount, currencycode) {
     	if (err) {
     		callback && callback(err);
     		return;
@@ -317,7 +317,7 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
 		    	return;
 		    }
 
-		    callback(null, body.success, body.detail, body.formattednewwalletbalance);
+		    callback(null, body.success, body.detail, body.formattednewwalletbalance, amount);
 	    });
     });
 };
