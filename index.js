@@ -1,11 +1,26 @@
 var Request = require('request');
 var SteamID = require('steamid');
 
+const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+
 module.exports = SteamStore;
 
-function SteamStore() {
+function SteamStore(options) {
+	options = options || {};
+	
 	this._jar = Request.jar();
-	this.request = Request.defaults({"jar": this._jar, "timeout": 50000, "gzip": true});
+	
+	var defaults = {
+		"jar": this._jar, 
+		"timeout": options.timeout || 50000, 
+		"gzip": true,
+		"headers": {
+			"User-Agent": options.userAgent || USER_AGENT
+		}
+	};
+	
+	this.request = options.request || Request.defaults({"forever": true});  // "forever" indicates that we want a keep-alive agent
+	this.request = this.request.defaults(defaults);
 
 	// UTC, English
 	this.setCookie("timezoneOffset=0,0");
