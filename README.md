@@ -21,13 +21,26 @@ A [`SteamID`](https://www.npmjs.com/package/steamid) object for the currently lo
 
 # Methods
 
-### Constructor()
+### Constructor([options])
+- `options` - An optional object containing zero or more of these properties:
+    - `timeout` - The timeout to use for HTTP(S) requests, in milliseconds; default is 50000 (50 seconds)
+    - `userAgent` - The user-agent header value; default is Chrome 56
+    - `request` - A [`request`](https://www.npmjs.com/package/request) instance
+        - This allows you to specify your own defaults on the request instance
+        - These options will always be overridden on the request instance: `jar`, `timeout`, `gzip`, `headers['User-Agent']`
 
 Constructs a new instance of `steamstore`. Example:
 
 ```js
-var SteamStore = require('steamstore');
-var store = new SteamStore();
+const SteamStore = require('steamstore');
+let store = new SteamStore();
+```
+
+or
+
+```js
+const SteamStore = require('steamstore');
+let store = new SteamStore({"timeout": 30000});
 ```
 
 ### setCookie(cookie)
