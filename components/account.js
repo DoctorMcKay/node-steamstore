@@ -213,7 +213,7 @@ SteamStore.prototype.hasPhone = function(callback) {
 		var $phone = $('.phone_header_description .account_data_field');
 		var match;
 
-		if($phone && (match = $phone.text().match(/([0-9]{2})/))) {
+		if($phone && (match = $phone.text().trim().match(/([0-9]{2})($|\s)/))) {
 			// Has phone number
 			callback(null, true, match[1]);
 			return;
