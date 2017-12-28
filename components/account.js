@@ -8,7 +8,7 @@ var EResult = require('../resources/EResult.js');
 SteamStore.prototype.EResult = EResult;
 
 SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callback) {
-	if(typeof bypassConfirmation === 'function') {
+	if (typeof bypassConfirmation === 'function') {
 		callback = bypassConfirmation;
 		bypassConfirmation = false;
 	}
@@ -76,12 +76,12 @@ SteamStore.prototype.resendVerificationSMS = function(callback) {
 		},
 		"json": true
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		if(body.success) {
-			if(body.state != "get_sms_code") {
+		if (body.success) {
+			if (body.state != "get_sms_code") {
 				callback(new Error("Unknown state " + body.state));
 				return;
 			}
@@ -90,7 +90,7 @@ SteamStore.prototype.resendVerificationSMS = function(callback) {
 			return;
 		}
 
-		if(body.errorText) {
+		if (body.errorText) {
 			callback(new Error(body.errorText));
 			return;
 		}
@@ -112,12 +112,12 @@ SteamStore.prototype.verifyPhoneNumber = function(code, callback) {
 		},
 		"json": true
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		if(body.success) {
-			if(body.state != "done") {
+		if (body.success) {
+			if (body.state != "done") {
 				callback(new Error("Unknown state " + body.state));
 				return;
 			}
@@ -126,7 +126,7 @@ SteamStore.prototype.verifyPhoneNumber = function(code, callback) {
 			return;
 		}
 
-		if(body.errorText) {
+		if (body.errorText) {
 			callback(new Error(body.errorText));
 			return;
 		}
@@ -144,7 +144,7 @@ SteamStore.prototype.removePhoneNumber = function(callback) {
 			"bWasEdit": ""
 		}
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
@@ -162,12 +162,12 @@ SteamStore.prototype.confirmRemovePhoneNumber = function(code, callback) {
 			"smscode": code
 		}
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
 		var match = body.match(/id="errortext"[^>]+>([^<]+)<\/div>/);
-		if(match) {
+		if (match) {
 			callback(new Error(match[1].trim()));
 		} else {
 			callback(null);
@@ -184,11 +184,11 @@ SteamStore.prototype.getAccountData = function(callback) {
 		},
 		"json": true
 	}, function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
-		if(!body.rgWishlist || !body.rgOwnedPackages || !body.rgOwnedApps || !body.rgRecommendedTags || !body.rgIgnoredApps) {
+		if (!body.rgWishlist || !body.rgOwnedPackages || !body.rgOwnedApps || !body.rgRecommendedTags || !body.rgIgnoredApps) {
 			callback(new Error("Malformed response"));
 			return;
 		}
@@ -205,7 +205,7 @@ SteamStore.prototype.getAccountData = function(callback) {
 SteamStore.prototype.hasPhone = function(callback) {
 	var self = this;
 	this.request.get("https://store.steampowered.com/account/", function(err, response, body) {
-		if(self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, response, callback)) {
 			return;
 		}
 
@@ -213,14 +213,14 @@ SteamStore.prototype.hasPhone = function(callback) {
 		var $phone = $('.phone_header_description .account_data_field');
 		var match;
 
-		if($phone && (match = $phone.text().trim().match(/([0-9]{2})($|\s)/))) {
+		if ($phone && (match = $phone.text().trim().match(/([0-9]{2})($|\s)/))) {
 			// Has phone number
 			callback(null, true, match[1]);
 			return;
 		}
 
 		// See if we have an add-number link
-		if($('a[href*="/phone/add"]').length) {
+		if ($('a[href*="/phone/add"]').length) {
 			callback(null, false);
 			return;
 		}

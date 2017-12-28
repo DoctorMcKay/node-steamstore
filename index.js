@@ -29,7 +29,7 @@ function SteamStore(options) {
 
 SteamStore.prototype.setCookie = function(cookie) {
 	var cookieName = cookie.match(/(.+)=/)[1];
-	if(cookieName == 'steamLogin') {
+	if (cookieName == 'steamLogin') {
 		this.steamID = new SteamID(cookie.match(/=(\d+)/)[1]);
 	}
 
@@ -45,7 +45,7 @@ SteamStore.prototype.getSessionID = function() {
 	var cookies = this._jar.getCookieString("http://store.steampowered.com").split(';');
 	for(var i = 0; i < cookies.length; i++) {
 		var match = cookies[i].trim().match(/([^=]+)=(.+)/);
-		if(match[1] == 'sessionid') {
+		if (match[1] == 'sessionid') {
 			return decodeURIComponent(match[2]);
 		}
 	}
@@ -60,17 +60,17 @@ function generateSessionID() {
 }
 
 SteamStore.prototype._checkHttpError = function(err, response, callback) {
-	if(err) {
+	if (err) {
 		callback(err);
 		return true;
 	}
 
-	if(response.statusCode >= 300 && response.statusCode <= 399 && response.headers.location.indexOf('/login') != -1) {
+	if (response.statusCode >= 300 && response.statusCode <= 399 && response.headers.location.indexOf('/login') != -1) {
 		callback(new Error("Not Logged In"));
 		return true;
 	}
 
-	if(response.statusCode >= 400) {
+	if (response.statusCode >= 400) {
 		var error = new Error("HTTP error " + response.statusCode);
 		error.code = response.statusCode;
 		callback(error);
