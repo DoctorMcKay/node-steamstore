@@ -256,6 +256,34 @@ SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages
 	});
 };
 
+SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
+	var self = this;
+	this.request.post({
+		"uri": "https://store.steampowered.com/account/createwalletandcheckfunds/",
+		"form": {
+			"wallet_code": code,
+			"CreateFromAddress": "1",
+			"Address": billingAddress.address,
+			"City": billingAddress.city,
+			"Country": billingAddress.country,
+			"State": billingAddress.state,
+			"PostCode": billingAddress.postalCode
+		},
+		"json": true
+	}, function(err, res, body) {
+		if (self._checkHttpError(err, response, callback)) {
+			return;
+		}
+
+		if (!body.success && !body.detail && !body.wallet) {
+			callback(new Error("Malformed response"));
+			return;
+		}
+
+		callback(null, body.success, body.detail, body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail, body.wallet && body.wallet.amount, body.wallet && body.wallet.currencycode);
+	});
+};
+
 SteamStore.prototype.checkWalletCode = function(code, callback) {
 	var self = this;
 	this.request.post({
@@ -279,7 +307,7 @@ SteamStore.prototype.checkWalletCode = function(code, callback) {
 };
 
 SteamStore.prototype.redeemWalletCode = function(code, callback) {
-    var self = this;
+	var self = this;
     this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, redeemable, amount, currencycode) {
     	if (err) {
     		callback && callback(err);
@@ -294,10 +322,10 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
     		return;
 	    }
 
-	    self.request.post({
+    	self.request.post({
 		    "uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
 		    "form": {
-		    	"wallet_code": code
+			    "wallet_code": code
 		    },
 		    "json": true
 	    }, function(err, response, body) {
