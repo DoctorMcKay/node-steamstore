@@ -133,6 +133,28 @@ Gets information about products that your account owns, ignores, wants, or is re
 Sends a Steam gift in your inventory to another user. The gift will remain in your inventory until the recipient accepts it.
 You can re-send a gift which you've already sent. Gifts don't have to be tradable in order to be sent.
 
+### createWallet(walletCode, billingAddress, callback)
+- `walletCode` - A Steam wallet code you want to redeem
+- `billingAddress` - An object containing these properties:
+    - `address` - Your street address
+    - `city` - Your city
+    - `country` - Your country code, e.g. "US"
+    - `state` - Your state, e.g. "FL"
+    - `postalCode` - Your postal/ZIP code
+- `callback` - Required. Called when the requested data is available.
+   - `err` - An `Error` object if the request fails, or `null` otherwise
+   - `eresult` - An `EResult` value from `SteamStore.EResult`
+   - `detail` - A value from `SteamStore.EPurchaseResult`
+   - `redeemable` - `true` if this code can be redeemed, `false` if not
+   - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
+   - `currencycode` - If redeemable, this is the currency of `amount`
+   
+**v1.7.0 or later is required to use this method**
+
+Before you can redeem a Steam Wallet code, your account needs to have a wallet. If you don't yet have a wallet you can
+use this method to create one. Creating a wallet requires you to provide a wallet code, but the code won't be redeemed
+until you actually call `redeemWalletCode`.
+
 ### checkWalletCode(walletCode, callback)
 - `walletCode` - The Steam wallet code you want to check
 - `callback` - Required. Called when the requested data is available.
