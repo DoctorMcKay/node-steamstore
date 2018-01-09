@@ -271,7 +271,7 @@ SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
 		},
 		"json": true
 	}, function(err, res, body) {
-		if (self._checkHttpError(err, response, callback)) {
+		if (self._checkHttpError(err, res, callback)) {
 			return;
 		}
 
