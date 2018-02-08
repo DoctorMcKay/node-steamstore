@@ -144,7 +144,7 @@ You can re-send a gift which you've already sent. Gifts don't have to be tradabl
 - `callback` - Required. Called when the requested data is available.
    - `err` - An `Error` object if the request fails, or `null` otherwise
    - `eresult` - An `EResult` value from `SteamStore.EResult`
-   - `detail` - A value from `SteamStore.EPurchaseResult`
+   - `detail` - A value from `SteamStore.EPurchaseResult` or `undefined`
    - `redeemable` - `true` if this code can be redeemed, `false` if not
    - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
    - `currencycode` - If redeemable, this is the currency of `amount`
@@ -160,7 +160,7 @@ until you actually call `redeemWalletCode`.
 - `callback` - Required. Called when the requested data is available.
     - `err` - An `Error` object if the request fails, or `null` otherwise
     - `eresult` - An `EResult` value from `SteamStore.EResult`
-    - `detail` - A value from `SteamStore.EPurchaseResult`
+    - `detail` - A value from `SteamStore.EPurchaseResult` or `undefined`
     - `redeemable` - `true` if this code can be redeemed, `false` if not
     - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
     - `currencycode` - If redeemable, this is the currency of `amount`
@@ -174,7 +174,7 @@ Check to make sure a Steam wallet code is valid, and if it is valid, figure out 
 - `callback` - Optional. Called when the request completes.
     - `err` - An `Error` object if the request fails, or `null` on success
     - `eresult` - An `EResult` value from `SteamStore.EResult`
-    - `detail` - A value from `SteamStore.EPurchaseResult`
+    - `detail` - A value from `SteamStore.EPurchaseResult` or `undefined`
     - `formattedNewWalletBalance` - If redeemed successfully, this is your new wallet balance as a string, formatted for human display (e.g. `$20.00`)   
     - `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
 
