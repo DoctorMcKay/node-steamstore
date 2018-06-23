@@ -14,9 +14,9 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 	}
 
 	var self = this;
-	this.request.get({
+	this.request.post({
 		"uri": "https://store.steampowered.com/phone/add_ajaxop",
-		"qs": {
+		"form": {
 			"op": "get_phone_number",
 			"input": number,
 			"sessionID": this.getSessionID(),
