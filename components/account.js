@@ -70,7 +70,7 @@ SteamStore.prototype.resendVerificationSMS = function(callback) {
 	var self = this;
 	this.request.post({
 		"uri": "https://store.steampowered.com/phone/add_ajaxop",
-		"qs": {
+		"form": {
 			"op": "resend_sms",
 			"input": "",
 			"sessionID": this.getSessionID(),
@@ -108,7 +108,7 @@ SteamStore.prototype.verifyPhoneNumber = function(code, callback) {
 	var self = this;
 	this.request.post({
 		"uri": "https://store.steampowered.com/phone/add_ajaxop",
-		"qs": {
+		"form": {
 			"op": "get_sms_code",
 			"input": code,
 			"sessionID": this.getSessionID(),
