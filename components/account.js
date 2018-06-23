@@ -21,7 +21,9 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 			"input": number,
 			"sessionID": this.getSessionID(),
 			"confirmed": bypassConfirmation ? 1 : 0,
-			"checkfortos": 1
+			"checkfortos": 1,
+			"bisediting": 0,
+			"token": 0
 		},
 		"json": true
 	}, function(err, response, body) {
