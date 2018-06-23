@@ -68,13 +68,16 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 
 SteamStore.prototype.resendVerificationSMS = function(callback) {
 	var self = this;
-	this.request.get({
+	this.request.post({
 		"uri": "https://store.steampowered.com/phone/add_ajaxop",
 		"qs": {
 			"op": "resend_sms",
 			"input": "",
 			"sessionID": this.getSessionID(),
-			"confirmed": 0
+			"confirmed": 0,
+			"checkfortos": 1,
+			"bisediting": 0,
+			"token": 0
 		},
 		"json": true
 	}, function(err, response, body) {
@@ -103,14 +106,16 @@ SteamStore.prototype.resendVerificationSMS = function(callback) {
 
 SteamStore.prototype.verifyPhoneNumber = function(code, callback) {
 	var self = this;
-	this.request.get({
+	this.request.post({
 		"uri": "https://store.steampowered.com/phone/add_ajaxop",
 		"qs": {
 			"op": "get_sms_code",
 			"input": code,
 			"sessionID": this.getSessionID(),
 			"confirmed": 1,
-			"checkfortos": 1
+			"checkfortos": 1,
+			"bisediting": 0,
+			"token": 0
 		},
 		"json": true
 	}, function(err, response, body) {
