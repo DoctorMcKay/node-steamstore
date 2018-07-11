@@ -29,7 +29,7 @@ function SteamStore(options) {
 
 SteamStore.prototype.setCookie = function(cookie) {
 	var cookieName = cookie.match(/(.+)=/)[1];
-	if (cookieName == 'steamLogin') {
+	if (cookieName == 'steamLogin' || cookieName == 'steamLoginSecure') {
 		this.steamID = new SteamID(cookie.match(/=(\d+)/)[1]);
 	}
 
