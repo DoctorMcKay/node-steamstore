@@ -287,7 +287,7 @@ SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
 			return;
 		}
 
-		callback(null, body.success, body.detail, body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail, body.wallet && body.wallet.amount, body.wallet && body.wallet.currencycode);
+		callback(null, body.success, body.detail, body.success == EResult.OK && body.detail && body.detail == EPurchaseResult.NoDetail, body.wallet && body.wallet.amount, body.wallet && body.wallet.currencycode);
 	});
 };
 
