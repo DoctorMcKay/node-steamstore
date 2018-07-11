@@ -1,6 +1,6 @@
 {
 	"name": "steamstore",
-	"version": "1.7.1",
+	"version": "1.7.2",
 	"description": "Interacts with the store.steampowered.com site for account management",
 	"keywords": [
 		"steam",
