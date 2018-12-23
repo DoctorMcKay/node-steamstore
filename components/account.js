@@ -241,7 +241,7 @@ SteamStore.prototype.setDisplayLanguages = function(prim_language, sec_languages
 		callback = sec_languages;
 		sec_languages = undefined;
 	}
-	
+
 	var self = this;
 	this.request.post({
 		"uri": "https://store.steampowered.com/account/savelanguagepreferences",
@@ -274,7 +274,8 @@ SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
 			"City": billingAddress.city,
 			"Country": billingAddress.country,
 			"State": billingAddress.state,
-			"PostCode": billingAddress.postalCode
+			"PostCode": billingAddress.postalCode,
+			"sessionid": this.getSessionID()
 		},
 		"json": true
 	}, function(err, res, body) {
@@ -296,7 +297,8 @@ SteamStore.prototype.checkWalletCode = function(code, callback) {
 	this.request.post({
 		"uri": "https://store.steampowered.com/account/validatewalletcode/",
 		"form": {
-			"wallet_code": code
+			"wallet_code": code,
+			"sessionid": this.getSessionID()
 		},
 		"json": true
 	}, function(err, response, body) {
@@ -332,7 +334,8 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
     	self.request.post({
 		    "uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
 		    "form": {
-			    "wallet_code": code
+			    "wallet_code": code,
+					"sessionid": self.getSessionID()
 		    },
 		    "json": true
 	    }, function(err, response, body) {
