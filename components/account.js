@@ -317,42 +317,42 @@ SteamStore.prototype.checkWalletCode = function(code, callback) {
 
 SteamStore.prototype.redeemWalletCode = function(code, callback) {
 	var self = this;
-    this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, redeemable, amount, currencycode) {
-    	if (err) {
-    		callback && callback(err);
-    		return;
-	    }
+	this.checkWalletCode(code, function(err, eresult, purchaseresultdetail, redeemable, amount, currencycode) {
+		if (err) {
+			callback && callback(err);
+			return;
+		}
 
-	    if (!redeemable) {
-    		var error = new Error("Wallet code is not valid");
-    		error.eresult = eresult;
-    		error.purchaseresultdetail = purchaseresultdetail;
-    		callback && callback(error);
-    		return;
-	    }
+		if (!redeemable) {
+			var error = new Error("Wallet code is not valid");
+			error.eresult = eresult;
+			error.purchaseresultdetail = purchaseresultdetail;
+			callback && callback(error);
+			return;
+		}
 
-    	self.request.post({
-		    "uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
-		    "form": {
-			    "wallet_code": code,
-					"sessionid": self.getSessionID()
-		    },
-		    "json": true
-	    }, function(err, response, body) {
-		    if (!callback) {
-			    return;
-		    }
+		self.request.post({
+			"uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
+			"form": {
+				"wallet_code": code,
+				"sessionid": self.getSessionID()
+			},
+			"json": true
+		}, function(err, response, body) {
+			if (!callback) {
+				return;
+			}
 
-    		if (self._checkHttpError(err, response, callback)) {
-    			return;
-		    }
+			if (self._checkHttpError(err, response, callback)) {
+				return;
+			}
 
-		    if (!body.success && !body.detail) {
-		    	callback(new Error("Malformed response"));
-		    	return;
-		    }
+			if (!body.success && !body.detail) {
+				callback(new Error("Malformed response"));
+				return;
+			}
 
-		    callback(null, body.success, body.detail, body.formattednewwalletbalance, amount);
-	    });
-    });
+			callback(null, body.success, body.detail, body.formattednewwalletbalance, amount);
+		});
+	});
 };
