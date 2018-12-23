@@ -7,18 +7,18 @@ module.exports = SteamStore;
 
 function SteamStore(options) {
 	options = options || {};
-	
+
 	this._jar = Request.jar();
-	
+
 	var defaults = {
-		"jar": this._jar, 
-		"timeout": options.timeout || 50000, 
+		"jar": this._jar,
+		"timeout": options.timeout || 50000,
 		"gzip": true,
 		"headers": {
 			"User-Agent": options.userAgent || USER_AGENT
 		}
 	};
-	
+
 	this.request = options.request || Request.defaults({"forever": true});  // "forever" indicates that we want a keep-alive agent
 	this.request = this.request.defaults(defaults);
 
@@ -44,7 +44,7 @@ SteamStore.prototype.setCookies = function(cookies) {
 
 SteamStore.prototype.getSessionID = function() {
 	var cookies = this._jar.getCookieString("http://store.steampowered.com").split(';');
-	for(var i = 0; i < cookies.length; i++) {
+	for (var i = 0; i < cookies.length; i++) {
 		var match = cookies[i].trim().match(/([^=]+)=(.+)/);
 		if (match[1] == 'sessionid') {
 			return decodeURIComponent(match[2]);
