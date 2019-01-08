@@ -194,3 +194,15 @@ redeemable, the callback will be invoked with an `Error` passed as the first par
 **v1.5.0 or later is required to use this method**
 
 Updates your account's display languages for the Steam store.
+
+### redeemGameKey(gameKey[, callback])
+- `gameKey` - The Steam game key you want to redeem
+- `callback` - Optional. Called when the request completes.
+    - `err` - An `Error` object if the request fails, or `null` on success
+    - `eresult` - An `EResult` value from `SteamStore.EResult`
+    - `ekeyactivationresult` - A value from `SteamStore.EKeyActivationResult`
+    - `purchase_receipt_info` - Info about the redeemed key
+
+**v1.6.0 or later is required to use this method**
+
+Attempts to redeem a Steam game key on your account.
