@@ -1,16 +1,21 @@
-var Request = require('request');
-var SteamID = require('steamid');
+const Request = require('request');
+const SteamID = require('steamid');
 
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 
 module.exports = SteamStore;
 
+/**
+ * Create a new SteamStore instance.
+ * @param {object} [options]
+ * @constructor
+ */
 function SteamStore(options) {
 	options = options || {};
 
 	this._jar = Request.jar();
 
-	var defaults = {
+	let defaults = {
 		"jar": this._jar,
 		"timeout": options.timeout || 50000,
 		"gzip": true,
@@ -27,31 +32,43 @@ function SteamStore(options) {
 	this.setCookie("Steam_Language=english");
 }
 
+/**
+ * Set a single cookie on this SteamStore instance.
+ * @param {string} cookie - In format "cookieName=cookieValue"
+ */
 SteamStore.prototype.setCookie = function(cookie) {
-	var cookieName = cookie.match(/(.+)=/)[1];
+	let cookieName = cookie.match(/(.+)=/)[1];
 	if (cookieName == 'steamLogin' || cookieName == 'steamLoginSecure') {
 		this.steamID = new SteamID(cookie.match(/=(\d+)/)[1]);
 	}
 
-	var isSecure = !!cookieName.match(/(^steamMachineAuth|^steamLoginSecure$)/);
+	let isSecure = !!cookieName.match(/(^steamMachineAuth|^steamLoginSecure$)/);
 	this._jar.setCookie(Request.cookie(cookie), (isSecure ? "https://" : "http://") + "store.steampowered.com");
 	this._jar.setCookie(Request.cookie(cookie), (isSecure ? "https://" : "http://") + "steamcommunity.com");
 };
 
+/**
+ * Set multiple cookies.
+ * @param {string[]} cookies
+ */
 SteamStore.prototype.setCookies = function(cookies) {
 	cookies.forEach(this.setCookie.bind(this));
 };
 
+/**
+ * Get this SteamStore instance's sessionid CSRF token.
+ * @returns {string}
+ */
 SteamStore.prototype.getSessionID = function() {
-	var cookies = this._jar.getCookieString("http://store.steampowered.com").split(';');
-	for (var i = 0; i < cookies.length; i++) {
-		var match = cookies[i].trim().match(/([^=]+)=(.+)/);
+	let cookies = this._jar.getCookieString("http://store.steampowered.com").split(';');
+	for (let i = 0; i < cookies.length; i++) {
+		let match = cookies[i].trim().match(/([^=]+)=(.+)/);
 		if (match[1] == 'sessionid') {
 			return decodeURIComponent(match[2]);
 		}
 	}
 
-	var sessionID = generateSessionID();
+	let sessionID = generateSessionID();
 	this.setCookie("sessionid=" + sessionID);
 	return sessionID;
 };
@@ -72,7 +89,7 @@ SteamStore.prototype._checkHttpError = function(err, response, callback) {
 	}
 
 	if (response.statusCode >= 400) {
-		var error = new Error("HTTP error " + response.statusCode);
+		let error = new Error("HTTP error " + response.statusCode);
 		error.code = response.statusCode;
 		callback(error);
 		return true;
