@@ -1,6 +1,7 @@
 {
 	"name": "steamstore",
-	"version": "1.7.4",
+	"version": "2.0.0",
+	"private": true,
 	"description": "Interacts with the store.steampowered.com site for account management",
 	"keywords": [
 		"steam",
@@ -23,8 +24,12 @@
 		"url": "https://github.com/DoctorMcKay/node-steamstore.git"
 	},
 	"dependencies": {
+		"@doctormckay/stdlib": "^1.7.0",
 		"cheerio": "^0.22.0",
-		"request": "^2.87.0",
-		"steamid": "^1.0.0"
+		"request": "^2.88.0",
+		"steamid": "^1.1.0"
+	},
+	"engines": {
+		"node": ">=8.0.0"
 	}
 }

@@ -212,3 +212,12 @@ redeemable, the callback will be invoked with an `Error` passed as the first par
 **v1.5.0 or later is required to use this method**
 
 Updates your account's display languages for the Steam store.
+
+### addFreeLicense(subID[, callback])
+- `subID` - The ID of the free-on-demand package you would like to claim
+- `callback` - Optional. Called when the request completes.
+	- `err` - An `Error` object on failure, or `null` on success
+
+**v2.0.0 or later is required to use this method**
+
+Request to add an eligible free-on-demand package to your Steam account.
