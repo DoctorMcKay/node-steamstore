@@ -458,3 +458,29 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
 		});
 	});
 };
+
+/**
+ * Get the current formatted balance of your Steam wallet.
+ * @param {function} [callback]
+ * @returns {Promise}
+ */
+SteamStore.prototype.getWalletBalance = function(callback) {
+	return StdLib.Promises.callbackPromise(null, callback, (accept, reject) => {
+		this.request.get({
+			"uri": "https://store.steampowered.com/steamaccount/addfunds"
+		}, (err, res, body) => {
+			if (this._checkHttpError(err, res, reject)) {
+				return;
+			}
+
+			let $ = Cheerio.load(body);
+			let formattedBalance = $('.accountBalance .accountData.price').text();
+
+			if (!formattedBalance) {
+				return reject(new Error('Unable to get wallet balance; perhaps your account doesn\'t have a wallet yet.'));
+			}
+
+			return accept({formattedBalance});
+		});
+	});
+};

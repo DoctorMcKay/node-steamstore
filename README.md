@@ -203,6 +203,16 @@ Attempts to redeem a Steam Wallet code on your account. This will call `checkWal
 redeemable, the callback will be invoked with an `Error` passed as the first parameter. That `Error` will have message
 `Wallet code is not valid`, with `eresult` and `purchaseresultdetail` properties defined on that `Error` object.
 
+### getWalletBalance([callback])
+- `callback` - Called when the request completes.
+	- `err` - An `Error` object if the request fails, or `null` on success
+	- `response` - The response object
+		- `formattedBalance` - Your wallet balance as a string, formatted in your local currency (e.g. `"$1.23"`)
+
+**v2.1.0 or later is required to use this method**
+
+Gets your current Steam wallet balance.
+
 ### setDisplayLanguages(primary[, secondary][, callback])
 - `primary` - Your desired primary (display) language, as a string (e.g. `english` or `danish`)
 - `secondary` - Your desired secondary languages, as an array of strings of the same format as `primary`
