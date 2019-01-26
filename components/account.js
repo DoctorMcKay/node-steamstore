@@ -222,7 +222,7 @@ SteamStore.prototype.getAccountData = function(callback) {
 			},
 			"json": true
 		}, (err, response, body) => {
-			if (self._checkHttpError(err, response, reject)) {
+			if (this._checkHttpError(err, response, reject)) {
 				return;
 			}
 
