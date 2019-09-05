@@ -231,3 +231,12 @@ Updates your account's display languages for the Steam store.
 **v2.0.0 or later is required to use this method**
 
 Request to add an eligible free-on-demand package to your Steam account.
+
+### removeLicense(subID[, callback])
+- `subID` - The ID of the complimentary license you would like to remove
+- `callback` - Optional. Called when the request completes.
+    - `err` - An `Error` objecton failure, or `null` on success
+
+**v2.2.0 or later is required to use this method**
+
+Removes an eligible complimentary license from your Steam account.
