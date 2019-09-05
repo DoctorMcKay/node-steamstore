@@ -1,5 +1,7 @@
 const StdLib = require('@doctormckay/stdlib');
 
+const Helpers = require('./helpers.js');
+
 const SteamStore = require('../index.js');
 
 /**
@@ -9,7 +11,7 @@ const SteamStore = require('../index.js');
  * @returns {Promise}
  */
 SteamStore.prototype.addFreeLicense = function(subID, callback) {
-	return StdLib.Promises.callbackPromise(null, callback, true, (accept, reject) => {
+	return StdLib.Promises.callbackPromise(null, callback, true, (resolve, reject) => {
 		this.request.post({
 			"uri": "https://store.steampowered.com/checkout/addfreelicense",
 			"form": {
@@ -31,7 +33,40 @@ SteamStore.prototype.addFreeLicense = function(subID, callback) {
 				return reject(new Error('Malformed response'));
 			}
 
-			return accept();
+			return resolve();
+		});
+	});
+};
+
+/**
+ * Remove an eligible complimentary license from your account.
+ * @param {int} subID - The ID of the complimentary license you want to remove
+ * @param {function} [callback]
+ * @returns {Promise}
+ */
+SteamStore.prototype.removeLicense = function(subID, callback) {
+	return StdLib.Promises.callbackPromise(null, callback, true, (resolve, reject) => {
+		this.request.post({
+			uri: 'https://store.steampowered.com/account/removelicense',
+			form: {
+				sessionid: this.getSessionID(),
+				packageid: subID
+			},
+			json: true
+		}, (err, response, body) => {
+			if (this._checkHttpError(err, response, reject)) {
+				return;
+			}
+
+			if (!body || !body.success) {
+				return reject(new Error('Malformed response'));
+			}
+
+			if (body.success == 1) {
+				return resolve();
+			} else {
+				return reject(Helpers.eresultError(body.success));
+			}
 		});
 	});
 };
