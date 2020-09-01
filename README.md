@@ -174,19 +174,9 @@ Before you can redeem a Steam Wallet code, your account needs to have a wallet. 
 use this method to create one. Creating a wallet requires you to provide a wallet code, but the code won't be redeemed
 until you actually call `redeemWalletCode`.
 
-### checkWalletCode(walletCode, callback)
-- `walletCode` - The Steam wallet code you want to check
-- `callback` - Required. Called when the requested data is available.
-	- `err` - An `Error` object if the request fails, or `null` otherwise
-	- `eresult` - An `EResult` value from `SteamStore.EResult`
-	- `detail` - A value from `SteamStore.EPurchaseResult` or `undefined`
-	- `redeemable` - `true` if this code can be redeemed, `false` if not
-	- `amount` - If redeemable, this is how much the code is worth, in its currency's lowest denomination (e.g. USD cents)
-	- `currencyCode` - If redeemable, this is the currency of `amount`
+### checkWalletCode()
 
-**v1.5.0 or later is required to use this method**
-
-Check to make sure a Steam wallet code is valid, and if it is valid, figure out how much it's worth.
+**THIS METHOD IS NO LONGER FUNCTIONAL. IT WILL BE REMOVED IN A FUTURE RELEASE.**
 
 ### redeemWalletCode(walletCode[, callback])
 - `walletCode` - The Steam wallet code you want to redeem
