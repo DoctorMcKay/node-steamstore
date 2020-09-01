@@ -370,39 +370,11 @@ SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
  * @param {string} code
  * @param {function} [callback]
  * @returns {Promise}
+ * @deprecated No longer functional. Will be removed in next release.
  */
 SteamStore.prototype.checkWalletCode = function(code, callback) {
-	return StdLib.Promises.callbackPromise([
-		'eresult',
-		'detail',
-		'redeemable',
-		'amount',
-		'currencyCode'
-	], callback, (accept, reject) => {
-		this.request.post({
-			"uri": "https://store.steampowered.com/account/validatewalletcode/",
-			"form": {
-				"wallet_code": code,
-				"sessionid": this.getSessionID()
-			},
-			"json": true
-		}, (err, response, body) => {
-			if (this._checkHttpError(err, response, reject)) {
-				return;
-			}
-
-			if (!body.success && !body.detail && !body.wallet) {
-				return reject(new Error("Malformed response"));
-			}
-
-			accept({
-				"eresult": body.success,
-				"detail": body.detail,
-				"redeemable": body.success == EResult.OK && body.detail == EPurchaseResult.NoDetail,
-				"amount": body.wallet && body.wallet.amount,
-				"currencyCode": body.wallet && body.wallet.currencycode
-			});
-		});
+	return StdLib.Promises.callbackPromise(null, callback, (resolve, reject) => {
+		reject(new Error('checkWalletCode() is no longer functional'));
 	});
 };
 
@@ -419,41 +391,34 @@ SteamStore.prototype.redeemWalletCode = function(code, callback) {
 		'formattedNewWalletBalance',
 		'amount'
 	], callback, true, async (accept, reject) => {
-		let check;
-		try {
-			check = await this.checkWalletCode(code);
-		} catch (ex) {
-			return reject(ex);
-		}
-
-		if (!check.redeemable) {
-			let error = new Error("Wallet code is not valid");
-			error.eresult = check.eresult;
-			error.purchaseresultdetail = check.purchaseresultdetail;
-			return reject(error);
-		}
-
 		this.request.post({
-			"uri": "https://store.steampowered.com/account/confirmredeemwalletcode/",
-			"form": {
-				"wallet_code": code,
-				"sessionid": this.getSessionID()
+			uri: 'https://store.steampowered.com/account/ajaxredeemwalletcode/',
+			form: {
+				'wallet_code': code,
+				'sessionid': this.getSessionID()
 			},
-			"json": true
+			'json': true
 		}, (err, response, body) => {
 			if (this._checkHttpError(err, response, reject)) {
 				return;
 			}
 
 			if (!body.success && !body.detail) {
-				return reject(new Error("Malformed response"));
+				return reject(new Error('Malformed response'));
+			}
+
+			if (body.success == EResult.Fail && [EPurchaseResult.BadActivationCode, EPurchaseResult.DuplicateActivationCode].includes(body.detail)) {
+				let err = new Error('Wallet code is not valid');
+				err.eresult = body.success;
+				err.purchaseresultdetail = body.detail;
+				return reject(err);
 			}
 
 			return accept({
-				"eresult": body.success,
-				"detail": body.detail,
-				"formattedNewWalletBalance": body.formattednewwalletbalance,
-				"amount": body.amount
+				eresult: body.success,
+				detail: body.detail,
+				formattedNewWalletBalance: body.formattednewwalletbalance,
+				amount: body.amount
 			});
 		});
 	});
