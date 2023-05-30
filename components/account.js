@@ -73,11 +73,11 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 };
 
 /**
- * Verify email before adding phone number.
+ * Confirm that you have clicked the link in your email before adding a phone number.
  * @param {function} [callback]
  * @returns {Promise}
  */
-SteamStore.prototype.verifyEmail = function(callback) {
+SteamStore.prototype.sendPhoneNumberVerificationMessage = function(callback) {
 	return StdLib.Promises.callbackPromise(null, callback, (accept, reject) => {
 		this.request.post({
 			"uri": "https://store.steampowered.com/phone/add_ajaxop",

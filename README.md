@@ -83,9 +83,9 @@ Returns the value of the `sessionid` cookie, or creates a new random one and add
 	- `err` - An `Error` object on failure, or `null` on success. The `confirmation` property will be `true` if this is
 	a confirmation-level error which can be overridden by setting `bypassConfirmation` to `true`
 
-Adds a new phone number to your account. This triggers a verification Email to be sent. You can continue the process by calling [`verifyEmail`](#verifyemailcallback)
+Adds a new phone number to your account. This triggers a verification Email to be sent. You can continue the process by calling [`sendPhoneNumberVerificationMessage`](#sendphonenumberverificationmessagecallback)
 
-### verifyEmail(callback)
+### sendPhoneNumberVerificationMessage(callback)
 - `callback` - A function to be called when the request completes
 	- `err` - An `Error` object on failure, or `null` on success
 
