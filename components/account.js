@@ -43,7 +43,7 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 			let error;
 
 			if (body.success) {
-				if (body.state != "get_sms_code") {
+				if (body.state != "email_verification") {
 					error = new Error("Unknown state " + body.state);
 					error.confirmation = false;
 
@@ -68,6 +68,47 @@ SteamStore.prototype.addPhoneNumber = function(number, bypassConfirmation, callb
 			error = new Error("Malformed response");
 			error.confirmation = false;
 			return reject(error);
+		});
+	});
+};
+
+/**
+ * Confirm that you have clicked the link in your email before adding a phone number.
+ * @param {function} [callback]
+ * @returns {Promise}
+ */
+SteamStore.prototype.sendPhoneNumberVerificationMessage = function(callback) {
+	return StdLib.Promises.callbackPromise(null, callback, (accept, reject) => {
+		this.request.post({
+			"uri": "https://store.steampowered.com/phone/add_ajaxop",
+			"form": {
+				"op": "email_verification",
+				"input": "",
+				"sessionID": this.getSessionID(),
+				"confirmed": 1,
+				"checkfortos": 1,
+				"bisediting": 0,
+				"token": 0
+			},
+			"json": true
+		}, (err, response, body) => {
+			if (this._checkHttpError(err, response, reject)) {
+				return;
+			}
+
+			if (body.success) {
+				if (body.state != "get_sms_code") {
+					return reject(new Error("Unknown state " + body.state));
+				}
+
+				return accept();
+			}
+
+			if (body.errorText) {
+				return reject(new Error(body.errorText));
+			}
+
+			return reject(new Error("Malformed response"));
 		});
 	});
 };
