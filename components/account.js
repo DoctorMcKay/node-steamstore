@@ -374,7 +374,7 @@ SteamStore.prototype.createWallet = function(code, billingAddress, callback) {
 		'currencyCode'
 	], callback, (accept, reject) => {
 		this.request.post({
-			"uri": "https://store.steampowered.com/account/createwalletandcheckfunds/",
+			"uri": "https://store.steampowered.com/account/ajaxcreatewalletandcheckfunds/",
 			"form": {
 				"wallet_code": code,
 				"CreateFromAddress": "1",
